@@ -1,0 +1,732 @@
+/* ------------------------------------------------------------------ *
+ * Buddy Script - custom styles for components not covered by the provided
+ * design CSS (e.g. the reusable LikeButton, Modal, ImageUploader,
+ * VisibilitySelector and the dark-mode shell toggled from FeedLayout).
+ *
+ * The rest of the UI is styled entirely by the copied assets
+ * (bootstrap.min.css + common.css + main.css + responsive.css).
+ * ------------------------------------------------------------------ */
+
+:root {
+  --buddy-primary: #377dff;
+  --buddy-primary-2: #1890ff;
+  --buddy-danger: #e23b3b;
+  --buddy-text: #112032;
+  --buddy-muted: #666;
+  --buddy-border: #e8e8ef;
+  --buddy-bg: #f4f5fb;
+  --buddy-card: #ffffff;
+}
+
+html,
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* ---------- Spinner / loader ---------- */
+.buddy-spinner {
+  animation: buddy-spin 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.buddy-spinner-lg {
+  width: 34px;
+  height: 34px;
+}
+
+@keyframes buddy-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+._buddy_loader,
+._buddy_loader_screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--buddy-muted);
+  padding: 24px;
+}
+
+._buddy_loader_screen {
+  position: fixed;
+  inset: 0;
+  background: var(--buddy-bg);
+  z-index: 9999;
+  flex-direction: column;
+}
+
+._buddy_loader_label,
+._buddy_loader_label {
+  font-size: 14px;
+}
+
+/* ---------- Field / form errors ---------- */
+._input_error .form-control,
+._input_error ._social_login_input,
+._input_error ._social_registration_input {
+  border-color: var(--buddy-danger);
+}
+
+._field_error {
+  display: block;
+  color: var(--buddy-danger);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+._composer_error {
+  margin: 8px 4px 0;
+}
+
+/* ---------- Like button (reusable) ---------- */
+._buddy_like_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--buddy-muted);
+  font: inherit;
+  font-size: 14px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+._buddy_like_btn:hover {
+  color: var(--buddy-primary);
+  background: rgba(55, 125, 255, 0.08);
+}
+
+._buddy_like_btn._active {
+  color: var(--buddy-danger);
+}
+
+._buddy_like_btn._active:hover {
+  color: var(--buddy-danger);
+  background: rgba(226, 59, 59, 0.08);
+}
+
+._buddy_like_btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+._buddy_like_btn_sm {
+  font-size: 13px;
+  padding: 2px 4px;
+}
+
+._buddy_like_count {
+  font-weight: 600;
+}
+
+/* ---------- Visibility selector ---------- */
+._buddy_vis {
+  display: inline-flex;
+  background: #f0f1f7;
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+
+._buddy_vis_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  color: var(--buddy-muted);
+  padding: 6px 14px;
+  border-radius: 999px;
+  transition: all 0.15s ease;
+}
+
+._buddy_vis_btn._active {
+  background: #fff;
+  color: var(--buddy-primary);
+  box-shadow: 0 1px 3px rgba(17, 32, 50, 0.12);
+  font-weight: 600;
+}
+
+/* Dark mode styling for visibility selector */
+._dark_wrapper ._buddy_vis {
+  background: var(--bg5);
+}
+
+._dark_wrapper ._buddy_vis_btn {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+._dark_wrapper ._buddy_vis_btn:hover {
+  color: #fff;
+}
+
+._dark_wrapper ._buddy_vis_btn._active {
+  background: var(--bg6);
+  color: var(--color5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ---------- Image uploader ---------- */
+._buddy_uploader {
+  display: inline-block;
+}
+
+._buddy_uploader_input {
+  display: none;
+}
+
+._buddy_uploader_preview {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--buddy-border);
+}
+
+._buddy_uploader_img {
+  display: block;
+  max-width: 220px;
+  max-height: 180px;
+  object-fit: cover;
+}
+
+._buddy_uploader_remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(17, 32, 50, 0.65);
+  color: #fff;
+  cursor: pointer;
+}
+
+._buddy_uploader_remove:hover {
+  background: var(--buddy-danger);
+}
+
+/* ---------- Reaction / like summary (post) ---------- */
+._buddy_react {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(17, 32, 50, 0.06);
+  margin-left: -6px;
+}
+
+._buddy_react:first-child {
+  margin-left: 0;
+}
+
+._buddy_react_count {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--buddy-muted);
+  font: inherit;
+  padding: 0;
+  margin-left: 8px;
+}
+
+._buddy_react_count:hover {
+  color: var(--buddy-primary);
+}
+
+._buddy_link_btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: var(--buddy-muted);
+}
+
+._buddy_link_btn:hover {
+  color: var(--buddy-primary);
+}
+
+/* ---------- Dropdown backdrops (close-on-outside-click) ---------- */
+._buddy_dropdown_backdrop,
+._buddy_dropdown_backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+/* ---------- Comment action links (Like, Hide, Delete) ---------- */
+._comment_reply_list button {
+  border: none;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+._comment_reply_list button:focus,
+._comment_reply_list button:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+._comment_reply_list li ._time_link {
+  color: var(--color7);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+._comment_reply_list li ._time_link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Remove focus outlines from dropdown buttons/links ---------- */
+._feed_timeline_dropdown_link,
+._feed_timeline_dropdown_link:focus,
+._feed_timeline_dropdown_link:focus-visible,
+._nav_dropdown_link,
+._nav_dropdown_link:focus,
+._nav_dropdown_link:focus-visible,
+._danger_link,
+._danger_link:focus,
+._danger_link:focus-visible {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* ---------- Navbar profile alignment (override reference width) ---------- */
+._header_nav_profile_image {
+  width: 36px !important;
+  height: 36px;
+  margin: 0 8px 0 0;
+  flex-shrink: 0;
+}
+
+._header_nav_profile_image img {
+  display: block;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+._header_nav_profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 22px 0 26px;
+}
+
+._header_nav_dropdown {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 6px;
+}
+
+._header_nav_para {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color6);
+  margin: 0;
+}
+
+._header_nav_dropdown_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+._header_nav_dropdown_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+._header_profile_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+._header_profile_img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ---------- Modal ---------- */
+._buddy_modal_overloy {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 32, 50, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 2000;
+}
+
+._buddy_modal {
+  background: var(--buddy-card);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(17, 32, 50, 0.25);
+}
+
+._buddy_modal_sm {
+  max-width: 360px;
+}
+
+._buddy_modal_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--buddy-border);
+}
+
+._buddy_modal_title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+._buddy_modal_close {
+  border: none;
+  background: transparent;
+  color: var(--buddy-muted);
+  cursor: pointer;
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+._buddy_modal_close:hover {
+  background: #f0f1f7;
+  color: var(--buddy-text);
+}
+
+._buddy_modal_body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+._buddy_modal_footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--buddy-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+._buddy_likers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+._buddy_likers_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--buddy-border);
+}
+
+._buddy_likers_item:last-child {
+  border-bottom: none;
+}
+
+._buddy_empty {
+  color: var(--buddy-muted);
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ---------- Comment composer ---------- */
+._feed_inner_comment_box_form {
+  flex-wrap: nowrap !important;
+}
+
+._feed_inner_comment_box_form ._feed_inner_comment_box_content {
+  width: auto;
+  min-width: 0;
+}
+
+._feed_inner_comment_box_icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+._comment_send_btn {
+  color: var(--buddy-primary);
+}
+
+._comment_send_btn:hover:not(:disabled) {
+  color: var(--buddy-primary-2);
+}
+
+._comment_send_btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- Misc ---------- */
+._danger_link {
+  color: var(--buddy-danger) !important;
+}
+
+._btn_full {
+  width: 100%;
+}
+
+._buddy_react_1 {
+  margin-left: 0;
+}
+
+/* Form-level error banner (login / register) */
+._social_login_form_error {
+  display: block;
+  background: rgba(226, 59, 59, 0.1);
+  color: var(--buddy-danger);
+  border: 1px solid rgba(226, 59, 59, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+/* Empty / end-of-feed states in the feed */
+._feed_empty {
+  background: var(--buddy-card);
+  border-radius: 12px;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--buddy-muted);
+  margin-bottom: 16px;
+}
+
+._feed_end {
+  text-align: center;
+  color: var(--buddy-muted);
+  font-size: 13px;
+  padding: 18px 0 28px;
+}
+
+/* Hide legacy Bootstrap collapsible on desktop (we render explicit markup) */
+._header_nav .navbar-toggler {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  ._header_nav .navbar-toggler {
+    display: block;
+  }
+}
+
+/* ================================================================
+   COMMENT SECTION — Full redesign to fix overlap & unprofessional layout
+   Overrides the broken absolute-positioned action row from main.css
+   ================================================================ */
+
+/* Scrollable comment list container */
+._timline_comment_main {
+  padding: 8px 20px 16px !important;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Each comment row: avatar + bubble */
+._comment_main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* Avatar circle */
+._comment_image {
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  overflow: hidden;
+  border: 1.5px solid #e8e8ef !important;
+}
+
+/* Area to the right of avatar */
+._comment_area {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+/* Comment bubble — RESET the broken margin+absolute layout */
+._comment_details {
+  background: #f0f2f5 !important;
+  border-radius: 16px 16px 16px 4px !important;
+  padding: 10px 14px !important;
+  margin: 0 0 6px !important;
+  /* small gap below bubble, not 50px */
+  width: fit-content !important;
+  max-width: 100% !important;
+  position: relative !important;
+}
+
+/* Author name inside bubble */
+._comment_name_title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #112032 !important;
+  line-height: 1.3 !important;
+  margin-bottom: 3px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Comment body text */
+._comment_status_text {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #333 !important;
+  line-height: 1.55 !important;
+  word-break: break-word !important;
+  white-space: pre-wrap;
+}
+
+/* Action row (Like · Reply · time · Delete) — back in normal flow */
+._comment_reply._comment_reply_num {
+  position: static !important;
+  bottom: auto !important;
+  margin-top: 2px !important;
+}
+
+._comment_reply_list {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 2px 0 !important;
+  padding: 0 4px !important;
+}
+
+._comment_reply_list li {
+  margin: 0 !important;
+}
+
+._comment_reply_list li+li::before {
+  content: "·";
+  color: #bbb;
+  margin: 0 5px;
+  font-size: 12px;
+}
+
+._comment_reply_list li ._time_link,
+._comment_reply_list li span {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #888 !important;
+  line-height: 1.4 !important;
+  cursor: pointer;
+}
+
+._comment_reply_list li ._time_link:hover,
+._comment_reply_list li span:hover {
+  color: var(--buddy-primary) !important;
+  text-decoration: none !important;
+}
+
+/* Nested replies section */
+._comment_replies {
+  margin-top: 8px;
+  padding-left: 46px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Reply composer inside a comment */
+._comment_replies ._feed_inner_comment_box {
+  margin-top: 6px;
+  border-radius: 12px !important;
+}
+
+/* Comment composer box at top of section */
+._feed_inner_timeline_cooment_area ._feed_inner_comment_box {
+  margin: 0 20px 4px !important;
+  border-radius: 24px !important;
+  background: #f0f2f5 !important;
+  border: 1.5px solid #e8e8ef !important;
+}
+
+._feed_inner_timeline_cooment_area ._feed_inner_comment_box:focus-within {
+  border-color: var(--buddy-primary) !important;
+  background: #fff !important;
+}
+
+._comment_textarea {
+  font-size: 14px !important;
+  color: #333 !important;
+}
+
+/* Section header (Comments title + close button) */
+._feed_inner_comment_box_header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 20px !important;
+  margin-bottom: 8px !important;
+}
