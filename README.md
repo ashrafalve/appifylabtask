@@ -38,7 +38,22 @@ npm run start:dev
 The NestJS API will run at **`http://localhost:3001/api`**. 
 Interactive API documentation (Swagger) is available at **`http://localhost:3001/api/docs`**.
 
+### Alternative: Run with Docker (Backend & Database)
+You can run both PostgreSQL and the backend API using Docker Compose. Make sure Docker is running on your machine, then execute at the root directory:
+
+```bash
+# Build and start services
+docker compose up --build -d
+
+# (Optional) Seed the database with demo users/posts inside the container
+docker compose exec backend npm run prisma:seed
+```
+This automatically spins up:
+- **PostgreSQL** on port `5432`
+- **NestJS API** on port `3001` (hot-ready to connect with the frontend)
+
 ---
+
 
 ### 3. Run the Frontend App
 Open a second terminal window in the root directory:

@@ -96,13 +96,21 @@ npm run prisma:seed
 
 ### 5. Run
 
+**Locally (via Node):**
 ```bash
 npm run start:dev         # watch mode
 npm run build && npm run start:prod
 ```
 
+**Via Docker:**
+```bash
+# From the parent directory:
+docker compose up --build -d
+```
+
 The API is available at `http://localhost:3001/api`. Interactive API docs
 (Swagger) are at `http://localhost:3001/api/docs`.
+
 
 ---
 
