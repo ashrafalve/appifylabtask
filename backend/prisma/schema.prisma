@@ -1,0 +1,149 @@
+// Prisma schema for the AppifyLab social backend.
+// Engine: PostgreSQL. Designed to scale to millions of users, posts, comments
+// and replies. Critical access paths are covered by composite/secondary indexes
+// so the query planner can avoid full table scans.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// User
+// ---------------------------------------------------------------------------
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  firstName    String
+  lastName     String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  posts     Post[]
+  comments  Comment[]
+  replies   Reply[]
+  postLikes PostLike[]
+  commentLikes CommentLike[]
+  replyLikes ReplyLike[]
+
+  @@index([createdAt])
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// Post
+// ---------------------------------------------------------------------------
+model Post {
+  id        String   @id @default(uuid()) @db.Uuid
+  authorId  String   @db.Uuid
+  content   String
+  image     String?
+  visibility Visibility @default(PUBLIC)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  likes       PostLike[]
+
+  @@index([authorId, createdAt])
+  @@index([visibility, createdAt])
+  @@map("posts")
+}
+
+// ---------------------------------------------------------------------------
+// Comment
+// ---------------------------------------------------------------------------
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  postId    String   @db.Uuid
+  authorId  String   @db.Uuid
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post      Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  replies   Reply[]
+  likes     CommentLike[]
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+  @@map("comments")
+}
+
+// ---------------------------------------------------------------------------
+// Reply (to a comment)
+// ---------------------------------------------------------------------------
+model Reply {
+  id        String   @id @default(uuid()) @db.Uuid
+  commentId String   @db.Uuid
+  authorId  String   @db.Uuid
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment   Comment   @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes     ReplyLike[]
+
+  @@index([commentId, createdAt])
+  @@index([authorId])
+  @@map("replies")
+}
+
+// ---------------------------------------------------------------------------
+// Likes (separate tables, one per liked entity, dedup via unique constraint)
+// ---------------------------------------------------------------------------
+model PostLike {
+  id        String   @id @default(uuid()) @db.Uuid
+  postId    String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+  @@map("post_likes")
+}
+
+model CommentLike {
+  id        String   @id @default(uuid()) @db.Uuid
+  commentId String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("comment_likes")
+}
+
+model ReplyLike {
+  id        String   @id @default(uuid()) @db.Uuid
+  replyId   String   @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  reply Reply @relation(fields: [replyId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([replyId, userId])
+  @@index([replyId])
+  @@index([userId])
+  @@map("reply_likes")
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
