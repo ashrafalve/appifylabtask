@@ -36,7 +36,13 @@ async function bootstrap() {
     .map((o) => o.trim());
 
   app.setGlobalPrefix(apiPrefix);
-  app.use(helmet());
+  // Allow cross-origin embedding of uploaded images (frontend and API run on
+  // different ports in dev, so helmet's default `same-origin` CORP blocks <img>).
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
   app.enableCors({
     origin: corsOrigin?.includes('*') ? true : corsOrigin,
     credentials: true,

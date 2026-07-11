@@ -11,10 +11,9 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RepliesService } from './replies.service';
-import { CreateReplyDto, UpdateReplyDto } from './dto/reply.dto';
+import { CreateReplyDto, UpdateReplyDto, ReplyQueryDto } from './dto/reply.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser, AuthRequired } from '../common/decorators/current-user.decorator';
-import { PaginationDto } from '../common/dto/pagination.dto';
 
 /**
  * Reply endpoints. Replies target a comment. All require a valid JWT.
@@ -23,7 +22,7 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 @Controller('replies')
 @UseGuards(JwtAuthGuard)
 export class RepliesController {
-  constructor(private readonly repliesService: RepliesService) {}
+  constructor(private readonly repliesService: RepliesService) { }
 
   @Post()
   @AuthRequired()
@@ -37,10 +36,9 @@ export class RepliesController {
   @ApiOperation({ summary: 'List replies for a comment (paginated)' })
   async findAll(
     @CurrentUser('id') userId: string,
-    @Query('commentId') commentId: string,
-    @Query() query: PaginationDto,
+    @Query() query: ReplyQueryDto,
   ) {
-    return this.repliesService.findAll(commentId, userId, query);
+    return this.repliesService.findAll(query.commentId, userId, query);
   }
 
   @Get(':id')

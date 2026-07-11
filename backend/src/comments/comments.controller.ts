@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CommentsService } from './comments.service';
-import { CreateCommentDto, UpdateCommentDto } from './dto/comment.dto';
+import { CreateCommentDto, UpdateCommentDto, CommentQueryDto } from './dto/comment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser, AuthRequired } from '../common/decorators/current-user.decorator';
-import { PaginationDto } from '../common/dto/pagination.dto';
+
 
 /**
  * Comment endpoints. All require a valid JWT.
@@ -24,7 +24,7 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 @Controller('comments')
 @UseGuards(JwtAuthGuard)
 export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+  constructor(private readonly commentsService: CommentsService) { }
 
   @Post()
   @AuthRequired()
@@ -38,10 +38,9 @@ export class CommentsController {
   @ApiOperation({ summary: 'List comments for a post (paginated)' })
   async findAll(
     @CurrentUser('id') userId: string,
-    @Query('postId') postId: string,
-    @Query() query: PaginationDto,
+    @Query() query: CommentQueryDto,
   ) {
-    return this.commentsService.findAll(postId, userId, query);
+    return this.commentsService.findAll(query.postId, userId, query);
   }
 
   @Get(':id')
