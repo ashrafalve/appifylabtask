@@ -26,14 +26,14 @@ export interface LoginPayload {
 
 export const authService = {
   async register(payload: RegisterPayload): Promise<AuthResult> {
-    return api.post<AuthResult>("/auth/register", payload);
+    return api.post("/auth/register", payload) as Promise<AuthResult>;
   },
 
   async login(payload: LoginPayload): Promise<AuthResult> {
-    return api.post<AuthResult>("/auth/login", payload);
+    return api.post("/auth/login", payload) as Promise<AuthResult>;
   },
 
   async getMe(): Promise<User> {
-    return api.get<User>("/users/me");
+    return api.get("/users/me") as Promise<User>;
   },
 };

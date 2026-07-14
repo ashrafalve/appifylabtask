@@ -64,9 +64,9 @@ api.interceptors.response.use(
   (response) => {
     const body = response.data as Envelope;
     if (body && typeof body === "object" && "data" in body) {
-      return body.data;
+      return body.data as any;
     }
-    return body;
+    return response as any;
   },
   (error: AxiosError<Envelope>) => {
     const response = error.response;

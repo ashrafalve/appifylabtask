@@ -20,27 +20,18 @@ export interface CreateCommentPayload {
 
 export const commentService = {
   async list(postId: string, page = 1, limit = 20): Promise<Comment[]> {
-    const result = await api.get<{ items: Comment[]; meta: unknown }>("/comments", {
+    const result = (await api.get("/comments", {
       params: { postId, page, limit },
-    }) as unknown;
-    console.log("[commentService.list] API result:", result);
-    // Handle case where API returns null or the data structure is different
-    if (!result) return [];
-    if (Array.isArray(result)) return result as Comment[];
-    if (result && typeof result === 'object' && 'items' in result) {
-      return (result as { items: Comment[] }).items;
-    }
-    return [];
+    })) as { items: Comment[]; meta: unknown };
+    return result.items ?? [];
   },
 
   async create(payload: CreateCommentPayload): Promise<Comment> {
-    const data = await api.post<Comment>("/comments", payload) as unknown as Comment;
-    return data;
+    return api.post("/comments", payload) as Promise<Comment>;
   },
 
   async update(id: string, content: string): Promise<Comment> {
-    const data = await api.patch<Comment>(`/comments/${id}`, { content }) as unknown as Comment;
-    return data;
+    return api.patch(`/comments/${id}`, { content }) as Promise<Comment>;
   },
 
   async remove(id: string): Promise<void> {
@@ -48,12 +39,10 @@ export const commentService = {
   },
 
   async like(id: string): Promise<LikeResult> {
-    const data = await api.post<LikeResult>(`/comments/${id}/like`) as unknown as LikeResult;
-    return data;
+    return api.post(`/comments/${id}/like`) as Promise<LikeResult>;
   },
 
   async unlike(id: string): Promise<LikeResult> {
-    const data = await api.delete<LikeResult>(`/comments/${id}/like`) as unknown as LikeResult;
-    return data;
+    return api.delete(`/comments/${id}/like`) as Promise<LikeResult>;
   },
 };

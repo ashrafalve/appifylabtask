@@ -20,20 +20,18 @@ export interface CreateReplyPayload {
 
 export const replyService = {
   async list(commentId: string, page = 1, limit = 20): Promise<Reply[]> {
-    const result = await api.get<{ items: Reply[]; meta: unknown }>("/replies", {
+    const result = (await api.get("/replies", {
       params: { commentId, page, limit },
-    });
+    })) as { items: Reply[]; meta: unknown };
     return result.items ?? [];
   },
 
   async create(payload: CreateReplyPayload): Promise<Reply> {
-    const data = await api.post<Reply>("/replies", payload);
-    return data;
+    return api.post("/replies", payload) as Promise<Reply>;
   },
 
   async update(id: string, content: string): Promise<Reply> {
-    const data = await api.patch<Reply>(`/replies/${id}`, { content });
-    return data;
+    return api.patch(`/replies/${id}`, { content }) as Promise<Reply>;
   },
 
   async remove(id: string): Promise<void> {
@@ -41,12 +39,10 @@ export const replyService = {
   },
 
   async like(id: string): Promise<LikeResult> {
-    const data = await api.post<LikeResult>(`/replies/${id}/like`);
-    return data;
+    return api.post(`/replies/${id}/like`) as Promise<LikeResult>;
   },
 
   async unlike(id: string): Promise<LikeResult> {
-    const data = await api.delete<LikeResult>(`/replies/${id}/like`);
-    return data;
+    return api.delete(`/replies/${id}/like`) as Promise<LikeResult>;
   },
 };

@@ -26,8 +26,8 @@ export const registerSchema = z
       .regex(/[a-zA-Z]/, "Password must contain a letter")
       .regex(/\d/, "Password must contain a number"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    acceptTerms: z.literal(true, {
-      errorMap: () => ({ message: "You must accept the terms & conditions" }),
+    acceptTerms: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms & conditions",
     }),
   })
   .refine((values) => values.password === values.confirmPassword, {

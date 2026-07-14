@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { Visibility } from "@/lib/types";
 
 /**
  * Schema for the "create post" composer.
@@ -8,7 +7,7 @@ import type { Visibility } from "@/lib/types";
 export const createPostSchema = z
   .object({
     content: z.string(),
-    visibility: z.enum(["PUBLIC", "PRIVATE"]) as z.ZodType<Visibility>,
+    visibility: z.enum(["PUBLIC", "PRIVATE"]),
     image: z.instanceof(File).nullable().optional(),
   })
   .refine(

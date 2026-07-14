@@ -43,13 +43,12 @@ function toFormData(
 
 export const postService = {
   async list(page = 1, limit = 10): Promise<Post[]> {
-    const result = await api.get<{ items: Post[]; meta: unknown }>("/posts", { params: { page, limit } });
+    const result = (await api.get("/posts", { params: { page, limit } })) as { items: Post[]; meta: unknown };
     return result.items ?? [];
   },
 
   async getById(id: string): Promise<Post> {
-    const data = await api.get<Post>(`/posts/${id}`);
-    return data;
+    return api.get(`/posts/${id}`) as Promise<Post>;
   },
 
   async create(payload: CreatePostPayload): Promise<Post> {
@@ -57,8 +56,7 @@ export const postService = {
       { content: payload.content, visibility: payload.visibility },
       payload.image,
     );
-    const data = await api.post<Post>("/posts", form);
-    return data;
+    return api.post("/posts", form) as Promise<Post>;
   },
 
   async update(id: string, payload: UpdatePostPayload): Promise<Post> {
@@ -66,8 +64,7 @@ export const postService = {
       { content: payload.content, visibility: payload.visibility },
       payload.image,
     );
-    const data = await api.patch<Post>(`/posts/${id}`, form);
-    return data;
+    return api.patch(`/posts/${id}`, form) as Promise<Post>;
   },
 
   async remove(id: string): Promise<void> {
@@ -75,12 +72,10 @@ export const postService = {
   },
 
   async like(id: string): Promise<LikeResult> {
-    const data = await api.post<LikeResult>(`/posts/${id}/like`);
-    return data;
+    return api.post(`/posts/${id}/like`) as Promise<LikeResult>;
   },
 
   async unlike(id: string): Promise<LikeResult> {
-    const data = await api.delete<LikeResult>(`/posts/${id}/like`);
-    return data;
+    return api.delete(`/posts/${id}/like`) as Promise<LikeResult>;
   },
 };
