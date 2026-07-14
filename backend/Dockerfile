@@ -2,7 +2,7 @@
 FROM node:22-alpine AS base
 
 # Install build dependencies required for compiling native modules (like bcrypt)
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ openssl
 
 WORKDIR /usr/src/app
 
@@ -23,6 +23,7 @@ RUN npx prisma generate
 
 # --- Final Production Image ---
 FROM node:22-alpine AS production
+RUN apk add --no-cache openssl
 
 WORKDIR /usr/src/app
 
