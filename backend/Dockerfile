@@ -1,5 +1,5 @@
 # --- Base Image ---
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 # Install build dependencies required for compiling native modules (like bcrypt)
 RUN apk add --no-cache python3 make g++
@@ -22,7 +22,7 @@ COPY prisma ./prisma/
 RUN npx prisma generate
 
 # --- Final Production Image ---
-FROM node:20-alpine AS production
+FROM node:22-alpine AS production
 
 WORKDIR /usr/src/app
 
