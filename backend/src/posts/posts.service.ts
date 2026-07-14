@@ -7,28 +7,13 @@ import {
   resolvePagination,
   buildPaginationMeta,
 } from '../common/dto/pagination.dto';
-import { UploadsService } from '../uploads/uploads.service';
 import { CreatePostDto, UpdatePostDto } from './dto/post.dto';
 
-/**
- * PostsService
- * Manages post CRUD plus visibility rules and efficient, paginated feed reads.
- *
- * Visibility model:
- *  - PUBLIC  -> visible to everyone
- *  - PRIVATE -> visible only to the author
- * A viewer sees PUBLIC posts + their own PRIVATE posts.
- *
- * Performance:
- *  - Reads use indexes (authorId+createdAt, visibility+createdAt).
- *  - The feed batches the "liked by me" check into a single query (no N+1).
- */
 @Injectable()
 export class PostsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly likes: LikesService,
-    private readonly uploads: UploadsService,
   ) {}
 
   async create(authorId: string, dto: CreatePostDto, imageUrl?: string | null) {
@@ -186,7 +171,7 @@ export class PostsService {
       id: post.id,
       authorId: post.authorId,
       content: post.content,
-      image: this.uploads.buildImageUrl(post.image),
+      image: post.image,
       visibility: post.visibility,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,

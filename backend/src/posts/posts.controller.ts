@@ -17,20 +17,16 @@ import { CreatePostDto, UpdatePostDto } from './dto/post.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser, AuthRequired } from '../common/decorators/current-user.decorator';
 import { PaginationDto } from '../common/dto/pagination.dto';
-import { UploadsService } from '../uploads/uploads.service';
+import { SupabaseService } from '../uploads/supabase.service';
 import { ImageUploadInterceptor } from '../uploads/image-upload.interceptor';
 
-/**
- * Post endpoints. All routes require a valid JWT. Image upload is handled via
- * multipart/form-data using the DI-based ImageUploadInterceptor (field "image").
- */
 @ApiTags('posts')
 @Controller('posts')
 @UseGuards(JwtAuthGuard)
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
-    private readonly uploads: UploadsService,
+    private readonly supabase: SupabaseService,
   ) {}
 
   @Post()
@@ -43,7 +39,10 @@ export class PostsController {
     @Body() dto: CreatePostDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    const imageUrl = file ? this.uploads.toRelativePath(file.path) : null;
+    let imageUrl: string | null = null;
+    if (file) {
+      imageUrl = await this.supabase.upload(file);
+    }
     return this.postsService.create(userId, dto, imageUrl);
   }
 
@@ -72,7 +71,10 @@ export class PostsController {
     @Body() dto: UpdatePostDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    const imageUrl = file ? this.uploads.toRelativePath(file.path) : undefined;
+    let imageUrl: string | undefined = undefined;
+    if (file) {
+      imageUrl = await this.supabase.upload(file);
+    }
     return this.postsService.update(userId, id, dto, imageUrl);
   }
 

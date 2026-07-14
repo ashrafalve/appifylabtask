@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 import helmet from 'helmet';
 import compression from 'compression';
 import { AppModule } from './app.module';
@@ -59,14 +58,6 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new GlobalExceptionFilter());
-
-  const uploadDest = config.get<string>('UPLOAD_DEST') ?? 'uploads';
-  const uploadPath = join(process.cwd(), uploadDest);
-  logger.log(`Uploads directory: ${uploadPath}`);
-  logger.log(`Serving static uploads at: /${uploadDest}`);
-  app.useStaticAssets(uploadPath, {
-    prefix: `/${uploadDest}`,
-  });
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('AppifyLab Social API')
